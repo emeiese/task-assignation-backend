@@ -1,13 +1,21 @@
 from fastapi import FastAPI, Query, Body
 from typing import List, Dict, Optional
 from pydantic import BaseModel
-from server_functions import resolve_problem
+from server.server_functions import resolve_problem
 from math import floor
+from fastapi.middleware.cors import CORSMiddleware
 
-# uvicorn app:app --reload
+# uvicorn server.backend:app --reload
 
 app = FastAPI()
-
+origins = ["http://localhost:8080"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class ProblemParams(BaseModel):
     people: List[str]
@@ -26,7 +34,7 @@ def read_root():
 
 
 @app.post("/getOptions/")
-async def get_options(tasks: List[str]):
+async def get_options(tasks: List[str] = Body(..., embed=True)):
     """Given the tasks list, returns a list of dictionaries with the options for the fronetend
 
     Args:
