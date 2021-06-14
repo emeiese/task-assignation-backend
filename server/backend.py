@@ -44,7 +44,7 @@ async def get_options(tasks: List[str] = Body(..., embed=True)):
         [List[Dict]]: Lists with options
     """
     size = len(tasks)
-    d_options = {str(v): v for v in range(0, size)}
+    d_options = {str(v): v for v in range(0, size + 1)}
     options = []
     for k, v in d_options.items():
         option = {}
