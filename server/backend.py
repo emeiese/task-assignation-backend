@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # uvicorn server.backend:app --reload
 
 app = FastAPI()
-origins = ["http://localhost:8080"]
+origins = ["http://localhost:8080", "http://localhost:8000"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -55,7 +55,7 @@ async def get_options(tasks: List[str] = Body(..., embed=True)):
 
 
 @app.post("/checkCosts/")
-async def check_costs(costs: Dict[str, Dict[str, int]]):
+async def check_costs(costs: Dict[str, Dict[str, int]] = Body(..., embed=True)):
     """
     Chequea si los costos para cada persona entregados por el usuario son válidos
     """
@@ -64,9 +64,10 @@ async def check_costs(costs: Dict[str, Dict[str, int]]):
         s = sum(v for (k, v) in tasks_costs.items())
         if s != len(tasks_costs):
             correctness[human_name] = False
+            return False
         else:
             correctness[human_name] = True
-    return correctness
+    return True
 
 
 @app.post("/resolve/")
