@@ -126,7 +126,6 @@ async def solve_problem(params: ProblemParams):
     """
     return resolve_problem(params.names, params.tasks, params.days, params.costs, params.min_assign_task, params.max_assign_task, params.max_total_assign, params.min_total_assign)
 
-
 # Se le entrega una lista al path de la forma:
 # http://localhost:8000/items/?q=100&q=200
 # Además, tendrá un valor por defecto, que será [1, 2] si se entrega http://localhost:8000/items/

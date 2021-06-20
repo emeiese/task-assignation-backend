@@ -26,8 +26,8 @@ def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task
                 dpt_tuples.append((d, p, t))
 
     day_task_tuples = []
-    for d in days:  
-        for t in tasks:  
+    for d in days:
+        for t in tasks:
             day_task_tuples.append((d, t))
 
     # Problem
@@ -88,7 +88,7 @@ def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task
     val = value(prob.objective)
     print("Status:", status)
     print("Value:", val)
-    
+
     if status == 'Optimal':
         final = {}
         for task in tasks:
@@ -102,6 +102,4 @@ def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task
     else:
         final = None
 
-
-
-    return {"assignation": final, "status": status, "value": val}
+    return {"assignation": final, "status": status, "value": val, "names": people, "tasks": tasks, "days": days, "min_assign_task": max_assign_task, "min_assign_task": max_assign_task, "min_total_assign": min_total_assign, "max_total_assign": max_total_assign}
