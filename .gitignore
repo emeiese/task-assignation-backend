@@ -120,5 +120,6 @@ fabric.properties
 
 ### Others:
 server/__pycache__
+server/__pycache__/server_functions.cpython-38.pyc
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,visualstudiocode
