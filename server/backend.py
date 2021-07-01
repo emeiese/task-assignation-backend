@@ -5,7 +5,6 @@ from server.server_functions import resolve_problem
 from math import floor, ceil
 from fastapi.middleware.cors import CORSMiddleware
 
-# uvicorn server.backend:app --reload
 
 app = FastAPI()
 origins = ["http://localhost:8080", "http://localhost:8000"]
@@ -17,6 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 def return_options(min_value, max_value):
     d_options = {str(v): v for v in range(min_value, max_value + 1)}
     options = []
@@ -26,6 +26,7 @@ def return_options(min_value, max_value):
         option["value"] = v
         options.append(option)
     return options
+
 
 class ProblemParams(BaseModel):
     names: List[str]
@@ -37,11 +38,12 @@ class ProblemParams(BaseModel):
     max_total_assign: int = 10000
     min_total_assign: int = 1
 
+
 class ParamsLength(BaseModel):
     d: int
     t: int
     p: int
-    
+
 
 @app.get("/")
 def read_root():
@@ -50,23 +52,13 @@ def read_root():
 
 @app.post("/getOptions/")
 async def get_options(tasks: List[str] = Body(..., embed=True)):
-    """Given the tasks list, returns a list of dictionaries with the options for the fronetend
+    """Dada la lisa de tareas, retorna una lista de diccionarios con las opciones para el frontend
 
     Args:
-        tasks (List[str]): List of tasks
+        tasks (List[str]): Lista de tareas
 
     Returns:
-        [List[Dict]]: Lists with options
-    """
-    """ 
-    size = len(tasks)
-    d_options = {str(v): v for v in range(0, size + 1)}
-    options = []
-    for k, v in d_options.items():
-        option = {}
-        option["text"] = k
-        option["value"] = v
-        options.append(option)
+        [List[Dict]]: Lista con las opciones
     """
     options = return_options(0, len(tasks))
     return options
@@ -74,8 +66,14 @@ async def get_options(tasks: List[str] = Body(..., embed=True)):
 
 @app.post("/checkCosts/")
 async def check_costs(costs: Dict[str, Dict[str, int]] = Body(..., embed=True)):
-    """
-    Chequea si los costos para cada persona entregados por el usuario son válidos
+    """Chequea si los costos para cada persona entregados por el usuario son válido. 
+    Es decir, chequea que la suma de los costos para cada persona sea exactamente la cantidad de tareas existentes. 
+
+    Args:
+        costs (Dict[str, Dict[str, int]], optional): Diccionario de costos. Defaults to Body(..., embed=True).
+
+    Returns:
+        [Boolean]: Retorna true si es que los costos están bien asignados.
     """
     correctness = {}
     for human_name, tasks_costs in costs.items():
@@ -86,6 +84,7 @@ async def check_costs(costs: Dict[str, Dict[str, int]] = Body(..., embed=True)):
         else:
             correctness[human_name] = True
     return True
+
 
 @app.post("/get_restriction_options")
 async def get_restriction_options(params: ParamsLength):
@@ -121,22 +120,12 @@ async def get_restriction_options(params: ParamsLength):
 
 @app.post("/resolve/")
 async def solve_problem(params: ProblemParams):
-    """
-    Resuelve el problema
+    """Resuelve el problema utilizando los parámetros especificados por el usuario en el frontend. 
+
+    Args:
+        params (ProblemParams): diccionario con los parámetros del problema
+
+    Returns:
+        [dict]: diccionario con la solución y los parámetros del problema
     """
     return resolve_problem(params.names, params.tasks, params.days, params.costs, params.min_assign_task, params.max_assign_task, params.max_total_assign, params.min_total_assign)
-
-# Se le entrega una lista al path de la forma:
-# http://localhost:8000/items/?q=100&q=200
-# Además, tendrá un valor por defecto, que será [1, 2] si se entrega http://localhost:8000/items/
-
-# Los path params son los parámetros que van especificados entre {} al definir la ruta
-
-# En este caso, estamos especificando que 'q' es un query param opcional,
-# por lo que entregamos un valor por defecto
-
-# Query(...) declara explícitamente que ese es un query parameter.
-@app.get("/items/")
-async def read_items(q: Optional[List[int]] = Query([1, 2], title="Query item", description="Buena los cabros, aquí una descripción")):
-    query_items = {"q": q}
-    return query_items
