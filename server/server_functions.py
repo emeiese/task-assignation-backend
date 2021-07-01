@@ -102,4 +102,4 @@ def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task
     else:
         final = None
 
-    return {"assignation": final, "status": status, "value": val, "names": people, "tasks": tasks, "days": days, "min_assign_task": max_assign_task, "min_assign_task": max_assign_task, "min_total_assign": min_total_assign, "max_total_assign": max_total_assign}
+    return {"assignation": final, "status": status, "value": val, "names": people, "tasks": tasks, "days": days, "costs": costs, "min_assign_task": min_assign_task, "max_assign_task": max_assign_task, "min_total_assign": min_total_assign, "max_total_assign": max_total_assign}
