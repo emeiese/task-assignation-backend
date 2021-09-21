@@ -1,13 +1,13 @@
 from fastapi import FastAPI, Query, Body
 from typing import List, Dict, Optional
 from pydantic import BaseModel
-from server.server_functions import resolve_problem
+from server_functions import resolve_problem
 from math import floor, ceil
 from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
-origins = ["http://localhost:8080", "http://localhost:8000"]
+origins = ["http://localhost:8080", "http://localhost:8000", "https://asignador-de-tareas.netlify.app"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
