@@ -121,5 +121,6 @@ fabric.properties
 ### Others:
 /server/__**
 /server/.deta/
+/server/__pycache__
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,visualstudiocode
