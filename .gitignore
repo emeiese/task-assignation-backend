@@ -122,6 +122,5 @@ fabric.properties
 .deta/
 __pycache__
 .idea
-ownREADME.md
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm,visualstudiocode

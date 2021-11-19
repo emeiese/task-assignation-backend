@@ -5,6 +5,10 @@ from main import app
 
 client = TestClient(app)
 
+# Hacer un test que verifique que se cumplan las restricciones (caso factible)
+# Hacer test sobre caso infactible 
+# Hacer test sobre el resultado que entrega return_options
+# Hacer test sobre check_costs
 
 def test_read_main():
     d = {
