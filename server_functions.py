@@ -1,8 +1,17 @@
-from pulp import LpProblem, lpSum, LpVariable, LpMinimize, LpStatus, value
+from pulp import LpMinimize, LpProblem, LpStatus, LpVariable, lpSum, value
 
 
-def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task, max_total_assign, min_total_assign):
-    """Solves the optimization problem (optimal assignation for each task) 
+def resolve_problem(
+    people,
+    tasks,
+    days,
+    costs,
+    min_assign_task,
+    max_assign_task,
+    max_total_assign,
+    min_total_assign,
+):
+    """Solves the optimization problem (optimal assignation for each task)
     given the parameters, costs and restriction values.
 
     Args:
@@ -34,14 +43,19 @@ def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task
     prob = LpProblem("Assignation_Problem", LpMinimize)
 
     # Variables
-    assign = LpVariable.dicts("assignation",
-                              ((day, person, task)
-                               for (day, person, task) in dpt_tuples),
-                              cat='Binary')
+    assign = LpVariable.dicts(
+        "assignation",
+        ((day, person, task) for (day, person, task) in dpt_tuples),
+        cat="Binary",
+    )
 
     # Objective Function
     prob += lpSum(
-        [assign[day, person, task] * costs[person][task] for (day, person, task) in dpt_tuples])
+        [
+            assign[day, person, task] * costs[person][task]
+            for (day, person, task) in dpt_tuples
+        ]
+    )
 
     # Rstrictions
 
@@ -49,38 +63,42 @@ def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task
     if len(tasks) <= len(people):
         for person in people:
             for day in days:
-                prob += lpSum([assign[day, person, task]
-                              for task in tasks]) <= 1
+                prob += lpSum([assign[day, person, task] for task in tasks]) <= 1
 
     # Todos los días, cada turno debe estar asignado a 1 person (esto implica implícitamente que habrán m turnos asignados por día).
     for day in days:
         for task in tasks:
-            prob += lpSum([assign[day, person, task]
-                          for person in people]) == 1
+            prob += lpSum([assign[day, person, task] for person in people]) == 1
 
     # Restricciones de Justicia:
 
     # 1.Asignación mínima por tarea durante la semana para cada persona
     for task in tasks:
         for person in people:
-            prob += lpSum([assign[day, person, task]
-                          for day in days]) >= min_assign_task
+            prob += (
+                lpSum([assign[day, person, task] for day in days]) >= min_assign_task
+            )
 
     # 2.Máximo de asignaciones en una semana, para una tarea, por persona
     for person in people:
         for task in tasks:
-            prob += lpSum([assign[day, person, task]
-                          for day in days]) <= max_assign_task
+            prob += (
+                lpSum([assign[day, person, task] for day in days]) <= max_assign_task
+            )
 
     # 3.Número de asignaciones mínimas por persona durante una semana:
     for person in people:
-        prob += lpSum([assign[day, person, task]
-                      for (day, task) in day_task_tuples]) >= min_total_assign
+        prob += (
+            lpSum([assign[day, person, task] for (day, task) in day_task_tuples])
+            >= min_total_assign
+        )
 
     # 4.Número de asignaciones máximas por persona durante una semana:
     for person in people:
-        prob += lpSum([assign[day, person, task]
-                      for (day, task) in day_task_tuples]) <= max_total_assign
+        prob += (
+            lpSum([assign[day, person, task] for (day, task) in day_task_tuples])
+            <= max_total_assign
+        )
 
     print("-" * 50, "Resolviendo el problema", "-" * 50)
     prob.solve()
@@ -89,7 +107,7 @@ def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task
     print("Status:", status)
     print("Value:", val)
 
-    if status == 'Optimal':
+    if status == "Optimal":
         final = {}
         for task in tasks:
             assignations = {}
@@ -102,4 +120,16 @@ def resolve_problem(people, tasks, days, costs, min_assign_task, max_assign_task
     else:
         final = None
 
-    return {"assignation": final, "status": status, "value": val, "names": people, "tasks": tasks, "days": days, "costs": costs, "min_assign_task": min_assign_task, "max_assign_task": max_assign_task, "min_total_assign": min_total_assign, "max_total_assign": max_total_assign}
+    return {
+        "assignation": final,
+        "status": status,
+        "value": val,
+        "names": people,
+        "tasks": tasks,
+        "days": days,
+        "costs": costs,
+        "min_assign_task": min_assign_task,
+        "max_assign_task": max_assign_task,
+        "min_total_assign": min_total_assign,
+        "max_total_assign": max_total_assign,
+    }

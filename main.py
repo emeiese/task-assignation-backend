@@ -1,13 +1,18 @@
-from fastapi import FastAPI, Query, Body
-from typing import List, Dict, Optional
-from pydantic import BaseModel
-from server_functions import resolve_problem
-from math import floor, ceil
-from fastapi.middleware.cors import CORSMiddleware
+from math import ceil, floor
+from typing import Dict, List, Optional
 
+from fastapi import Body, FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+
+from server_functions import resolve_problem
 
 app = FastAPI()
-origins = ["http://localhost:8080", "http://localhost:8000", "https://asignador-de-tareas.netlify.app"]
+origins = [
+    "http://localhost:8080",
+    "http://localhost:8000",
+    "https://asignador-de-tareas.netlify.app",
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -66,8 +71,8 @@ async def get_options(tasks: List[str] = Body(..., embed=True)):
 
 @app.post("/checkCosts/")
 async def check_costs(costs: Dict[str, Dict[str, int]] = Body(..., embed=True)):
-    """Chequea si los costos para cada persona entregados por el usuario son válido. 
-    Es decir, chequea que la suma de los costos para cada persona sea exactamente la cantidad de tareas existentes. 
+    """Chequea si los costos para cada persona entregados por el usuario son válido.
+    Es decir, chequea que la suma de los costos para cada persona sea exactamente la cantidad de tareas existentes.
 
     Args:
         costs (Dict[str, Dict[str, int]], optional): Diccionario de costos. Defaults to Body(..., embed=True).
@@ -91,15 +96,15 @@ async def get_restriction_options(params: ParamsLength):
     """Retorna diccionarios con las opciones posibles para las restricciones
 
     Args:
-        d (int): cantidad total de días del problema 
-        t (int): cantidad total de tareas del problema 
-        p (int): cantidad total de personas del problema 
+        d (int): cantidad total de días del problema
+        t (int): cantidad total de tareas del problema
+        p (int): cantidad total de personas del problema
 
     Returns:
         [type]: [description]
     """
     # Mínimo y máximo de valores para asignar en la primera restricción
-    #max_one = ceil(d / t)
+    # max_one = ceil(d / t)
     max_one = 10
     min_one = 1
 
@@ -120,7 +125,7 @@ async def get_restriction_options(params: ParamsLength):
 
 @app.post("/resolve/")
 async def solve_problem(params: ProblemParams):
-    """Resuelve el problema utilizando los parámetros especificados por el usuario en el frontend. 
+    """Resuelve el problema utilizando los parámetros especificados por el usuario en el frontend.
 
     Args:
         params (ProblemParams): diccionario con los parámetros del problema
@@ -128,4 +133,13 @@ async def solve_problem(params: ProblemParams):
     Returns:
         [dict]: diccionario con la solución y los parámetros del problema
     """
-    return resolve_problem(params.names, params.tasks, params.days, params.costs, params.min_assign_task, params.max_assign_task, params.max_total_assign, params.min_total_assign)
+    return resolve_problem(
+        params.names,
+        params.tasks,
+        params.days,
+        params.costs,
+        params.min_assign_task,
+        params.max_assign_task,
+        params.max_total_assign,
+        params.min_total_assign,
+    )
