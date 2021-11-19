@@ -15,3 +15,6 @@
 1. Instalar test suite con
  ```pip install pytest```
 2. Correr pytest usando el comando `pytest` por consola. Esto corrrerá todos los archivos con nombre `test_*.py`
+
+## Deploy a producción:
+- Recomiendo hacerlo en [Deta](https://docs.deta.sh/docs/micros/deploy) porque a mi me funcionó :smile::whale: 
