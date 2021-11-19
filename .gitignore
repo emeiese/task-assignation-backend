@@ -119,10 +119,8 @@ fabric.properties
 .ionide
 
 ### Others:
-/server/__**
-/server/.deta/
-/server/__pycache__
-/server/node_modules/
+.deta/
+__pycache__
 .idea
 ownREADME.md
 
