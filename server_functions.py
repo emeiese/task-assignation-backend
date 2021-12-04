@@ -20,13 +20,25 @@ def resolve_problem(
         days ([List[str]]): Days or periods to consider on the optimization
         costs ([Dict[Dict[int]]]): Dictionary with the costs for each task for each human. Each key is a human name, while each subkey is a task.
         min_assign_task ([int]): Indicates the minimum number of assignations that a person must have on a task on a week or at the end of the periods.
-        max_assign_task ([int]): Indicates the maximum number of assignations that a person can have on a task on a week or at the end of the periods.
-        max_total_assign ([int]): Indicates the maximum number of total assignations that a person can have on a week or at the end of the periods.
+        max_assign_task ([int|boolean]): Indicates the maximum number of assignations that a person can have on a task on a week or at the end of the periods. 
+                                        If false, it means the user didn't specify this variable
+        max_total_assign ([int|boolean]): Indicates the maximum number of total assignations that a person can have on a week or at the end of the periods.
+                                        If false, it means the user didn't specify this variable
         min_total_assign ([int]): Indicates the minimum number of total assignations that a person must have on a week or at the end of the periods.
 
     Returns:
         [Dict]: Returns a dict with the optimum assignation, the status of the problem and the value of the optimization function.
     """
+    print(max_total_assign, max_assign_task)
+    if not max_assign_task:
+        temp_max_assign_task = 1000
+    else:
+        temp_max_assign_task = max_assign_task
+
+    if not max_total_assign:
+        temp_max_total_assign = 1000
+    else:
+        temp_max_total_assign = max_total_assign
 
     dpt_tuples = []
     for d in days:
@@ -83,7 +95,7 @@ def resolve_problem(
     for person in people:
         for task in tasks:
             prob += (
-                lpSum([assign[day, person, task] for day in days]) <= max_assign_task
+                lpSum([assign[day, person, task] for day in days]) <= temp_max_assign_task
             )
 
     # 3.Número de asignaciones mínimas por persona durante una semana:
@@ -97,7 +109,7 @@ def resolve_problem(
     for person in people:
         prob += (
             lpSum([assign[day, person, task] for (day, task) in day_task_tuples])
-            <= max_total_assign
+            <= temp_max_total_assign
         )
 
     print("-" * 50, "Resolviendo el problema", "-" * 50)
