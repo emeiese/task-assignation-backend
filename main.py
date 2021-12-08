@@ -12,6 +12,7 @@ origins = [
     "http://localhost:8080",
     "http://localhost:8000",
     "https://asignador-de-tareas.netlify.app",
+    "https://staging--asignador-de-tareas.netlify.app"
 ]
 app.add_middleware(
     CORSMiddleware,
