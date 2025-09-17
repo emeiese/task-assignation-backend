@@ -6,7 +6,7 @@ def resolve_problem(
     people: List[str],
     tasks: List[str],
     days: List[str],
-    costs: Dict[Dict[int]],
+    costs: Dict[str, Dict[str, int]],
     min_assign_task: int,
     max_assign_task: Union[int, bool],
     max_total_assign: int,
