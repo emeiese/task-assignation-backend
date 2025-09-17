@@ -1,7 +1,7 @@
-from math import ceil, floor
-from typing import Dict, List, Optional
+from math import floor
+from typing import Dict, List
 
-from fastapi import Body, FastAPI, Query
+from fastapi import Body, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
@@ -59,7 +59,8 @@ def read_root():
 
 @app.post("/getOptions/")
 async def get_options(tasks: List[str] = Body(..., embed=True)):
-    """Dada la lisa de tareas, retorna una lista de diccionarios con las opciones para el frontend
+    """Dada la lisa de tareas, retorna una lista de diccionarios con las
+       opciones para el frontend.
 
     Args:
         tasks (List[str]): Lista de tareas
@@ -72,12 +73,16 @@ async def get_options(tasks: List[str] = Body(..., embed=True)):
 
 
 @app.post("/checkCosts/")
-async def check_costs(costs: Dict[str, Dict[str, int]] = Body(..., embed=True)):
-    """Chequea si los costos para cada persona entregados por el usuario son válido.
-    Es decir, chequea que la suma de los costos para cada persona sea exactamente la cantidad de tareas existentes.
+async def check_costs(costs: Dict[str,
+                                  Dict[str, int]] = Body(..., embed=True)):
+    """
+    Chequea si los costos para cada persona entregados por el usuario son
+    válidos. Es decir, chequea que la suma de los costos para cada persona
+    sea exactamente la cantidad de tareas existentes.
 
     Args:
-        costs (Dict[str, Dict[str, int]], optional): Diccionario de costos. Defaults to Body(..., embed=True).
+        costs (Dict[str, Dict[str, int]], optional): Diccionario de costos.
+        Defaults to Body(..., embed=True).
 
     Returns:
         [Boolean]: Retorna true si es que los costos están bien asignados.
@@ -95,7 +100,8 @@ async def check_costs(costs: Dict[str, Dict[str, int]] = Body(..., embed=True)):
 
 @app.post("/get_restriction_options")
 async def get_restriction_options(params: ParamsLength):
-    """Retorna diccionarios con las opciones posibles para las restricciones
+    """
+    Retorna diccionarios con las opciones posibles para las restricciones
 
     Args:
         d (int): cantidad total de días del problema
@@ -103,7 +109,8 @@ async def get_restriction_options(params: ParamsLength):
         p (int): cantidad total de personas del problema
 
     Returns:
-        dict: un diccionario con las posibles opciones para setear las restricciones.
+        dict: un diccionario con las posibles opciones que puede seleccionar
+              el usuario para sus restricciones.
     """
     # Mínimo y máximo de valores para asignar en la primera restricción
     # max_one = ceil(d / t)
@@ -127,7 +134,9 @@ async def get_restriction_options(params: ParamsLength):
 
 @app.post("/resolve/")
 async def solve_problem(params: ProblemParams):
-    """Resuelve el problema utilizando los parámetros especificados por el usuario en el frontend.
+    """
+    Resuelve el problema utilizando los parámetros especificados por el
+    usuario en el frontend.
 
     Args:
         params (ProblemParams): diccionario con los parámetros del problema
