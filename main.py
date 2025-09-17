@@ -103,7 +103,7 @@ async def get_restriction_options(params: ParamsLength):
         p (int): cantidad total de personas del problema
 
     Returns:
-        [type]: [description]
+        dict: un diccionario con las posibles opciones para setear las restricciones.
     """
     # Mínimo y máximo de valores para asignar en la primera restricción
     # max_one = ceil(d / t)

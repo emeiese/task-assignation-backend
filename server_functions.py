@@ -1,16 +1,16 @@
 from pulp import LpMinimize, LpProblem, LpStatus, LpVariable, lpSum, value
-
+from typing import List, Dict, Union
 
 def resolve_problem(
-    people,
-    tasks,
-    days,
-    costs,
-    min_assign_task,
-    max_assign_task,
-    max_total_assign,
-    min_total_assign,
-):
+    people: List[str],
+    tasks: List[str],
+    days: List[str],
+    costs: Dict[Dict[int]],
+    min_assign_task: int,
+    max_assign_task: Union[int, bool],
+    max_total_assign: int,
+    min_total_assign: Union[int, bool],
+) -> Dict:
     """Solves the optimization problem (optimal assignation for each task)
     given the parameters, costs and restriction values.
 
